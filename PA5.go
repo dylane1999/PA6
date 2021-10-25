@@ -19,7 +19,7 @@ func checkError(e error) {
 func main() {
 	// start server on port 8080 and get connection
 	fmt.Println("Launching server on port:", 35703)
-	ln, _ := net.Listen("tcp", "3.143.172.18:35703")
+	ln, _ := net.Listen("tcp", ":35703")
 	defer ln.Close()
 
 	for {
