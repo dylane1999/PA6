@@ -20,26 +20,22 @@ func checkError(e error) {
 func main() {
 	// start server on port 8080 and get connection
 	fmt.Println("Launching server on port:", 35703)
-	listener, _ := net.Listen("tcp", ":35703")
-	defer listener.Close()
+	ln, _ := net.Listen("tcp", "localhost:35703")
+	defer ln.Close()
 
 	for {
-		go handleConcurrentRequests(listener)
+		connection, connErr := ln.Accept()
+		checkError(connErr)
+		defer connection.Close()
+		go handleConnection(connection)
 	}
 
 }
 
-// method that is used to handle new concurent connections
-func handleConcurrentRequests(ln net.Listener) {
-	connection, connErr := ln.Accept()
-	checkError(connErr)
-	defer connection.Close()
-	go handleConnection(connection)
-}
 
-// method to handle the connection, recive the file and write the new file and file size
-func handleConnection(connection net.Conn) {
+func handleConnection(connection net.Conn){
 	// read the file size from the client and print
+
 	reader := bufio.NewReader(connection)
 	originalFileSize, readErr := reader.ReadString('\n')
 	checkError(readErr)
@@ -77,11 +73,11 @@ func handleConnection(connection net.Conn) {
 	newFile := getFileWithLineNumbers(clientUpload, "output.txt")
 	newFileSize := getFileSize(newFile)
 
+	time.Sleep(5 * time.Second)
 	connectionWriter := bufio.NewWriter(connection)
 	message := fmt.Sprintf("original file size: %s. new file size: %s \n", strings.Split(originalFileSize, "\n")[0], newFileSize)
 	connectionWriter.WriteString(message)
 	connectionWriter.Flush()
-	time.Sleep(5 * time.Second)
 }
 
 // function that appends line numbers to the contents of a given file
