@@ -16,7 +16,7 @@ func checkError(e error) {
 
 func main() {
 	// create a connection to the server runnin on port 11111 on localhost
-	connection, err := net.Dial("tcp", "localhost:35703")
+	connection, err := net.Dial("tcp", "3.143.172.18:35703")
 	checkError(err)          // check for errors in connection
 	defer connection.Close() // defer to system for when to close connection
 
