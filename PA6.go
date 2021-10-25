@@ -32,8 +32,8 @@ func main() {
 
 }
 
-
-func handleConnection(connection net.Conn){
+// function to handle the network connection read the file size and do operations to get new file and send size
+func handleConnection(connection net.Conn) {
 	// read the file size from the client and print
 
 	reader := bufio.NewReader(connection)
